@@ -1,7 +1,8 @@
 #include <BMP_Steganography.h>
 #include <cstring>
 
-BmpSteganography::BmpSteganography(const char* filename) : Steganography(filename) {
+BmpSteganography::BmpSteganography(const char* filename)
+    : Steganography(filename) {
 }
 
 bool BmpSteganography::Hide(const char* message, const char* output_filename) {
@@ -11,22 +12,17 @@ bool BmpSteganography::Hide(const char* message, const char* output_filename) {
   memcpy(&start_offset, buf + 10, sizeof(start_offset));
 
   output.open(output_filename, std::ios::binary);
-  for (size_t i = 0; i < start_offset; i++) {
-    output << buf[i];
-  }
 
   size_t file_idx = start_offset;
   size_t msg_len = strlen(message);
 
-  //메시지 길이 삽입
-  for (int i = 31; i >= 0; i--) {
-    if (msg_len & (1 << i)) {
-      buf[file_idx] |= 1;
-    } else {
-      buf[file_idx] &= 0xFE;
-    }
-    output << buf[file_idx++];
+  // //메시지 길이 삽입
+  memcpy(buf + 6, &msg_len, sizeof(msg_len));
+
+  for (size_t i = 0; i < start_offset; i++) {
+    output << buf[i];
   }
+
 
   //메시지 삽입
   unsigned char onebit = 0b00000001;
@@ -67,24 +63,22 @@ std::string BmpSteganography::Reveal() {
   size_t start_offset;
   memcpy(&start_offset, buf + 10, sizeof(start_offset));
 
-  //메시지 길이 읽기
   size_t file_idx = start_offset;
-  size_t message_size = 0;
-  for (; file_idx < start_offset + 32; file_idx++) {
-    message_size <<= 1;
-    message_size |= (buf[file_idx] & 1);
-  }
+  size_t msg_len = 0;
+  //메시지 길이 읽기
+  memcpy(&msg_len, buf + 6, sizeof(msg_len));
+
 
   unsigned char onebit = 0b00000001;
   size_t bitidx = 0;
 
-  for (size_t msg_idx = 0; msg_idx < message_size; msg_idx++) {
+  for (size_t msg_idx = 0; msg_idx < msg_len; msg_idx++) {
     char msg_char = 0;
     for (int j = 0; j < 8; j++) {
       msg_char <<= 1;
-      msg_char |= ((buf[file_idx++] & onebit)>>bitidx);
-      if(file_idx==input_size) {
-        file_idx=start_offset+32;
+      msg_char |= ((buf[file_idx++] & onebit) >> bitidx);
+      if (file_idx == input_size) {
+        file_idx = start_offset + 32;
         bitidx++;
       }
     }
