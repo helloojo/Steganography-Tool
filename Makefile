@@ -11,9 +11,11 @@ obj_path=./obj/
 	g++ -c -O2 -Wall -I $(include_path) -o $@ -Wextra -pedantic $<
 
 HEADERS_OBJS = $(obj_path)Steganography.o \
+								$(obj_path)JPG_Steganography.o \
   		 					$(obj_path)BMP_Steganography.o
 HEADERS = $(include_path)Steganography.h \
-					$(include_path)BMP_Steganography.h
+					$(include_path)BMP_Steganography.h \
+					$(include_path)JPG_Steganography.h
 TARGET = steg
 TARGET_OBJ = $(obj_path)main.o
 
