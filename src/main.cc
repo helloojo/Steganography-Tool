@@ -4,6 +4,10 @@
 #include <cstring>
 #include <iostream>
 
+#ifndef WIN32
+using strcmpi = strcasecmp;
+#endif
+
 enum { ERROR = -1, HIDE, REVEAL };
 enum { NOTYPE = -1, JPEG, BMP, PNG };
 

@@ -1,5 +1,5 @@
-#ifndef JPG_STEGANOGRAPHY_HH
-#define JPG_STEGANOGRAPHY_HH
+#ifndef JPG_STEGANOGRAPHY_H
+#define JPG_STEGANOGRAPHY_H
 #include <Steganography.h>
 
 class JpgSteganography : public Steganography {
