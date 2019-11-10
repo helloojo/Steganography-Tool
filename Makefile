@@ -12,10 +12,12 @@ obj_path=./obj/
 
 HEADERS_OBJS = $(obj_path)Steganography.o \
 								$(obj_path)JPG_Steganography.o \
-  		 					$(obj_path)BMP_Steganography.o
+  		 					$(obj_path)BMP_Steganography.o \
+								$(obj_path)PNG_Steganography.o
 HEADERS = $(include_path)Steganography.h \
 					$(include_path)BMP_Steganography.h \
-					$(include_path)JPG_Steganography.h
+					$(include_path)JPG_Steganography.h \
+					$(include_path)PNG_Steganography.h
 TARGET = steg
 TARGET_OBJ = $(obj_path)main.o
 

@@ -1,5 +1,6 @@
 #include <BMP_Steganography.h>
 #include <JPG_Steganography.h>
+#include <PNG_Steganography.h>
 #include <Steganography.h>
 #include <cstring>
 #include <iostream>
@@ -29,10 +30,6 @@ int main(int argc, const char* argv[]) {
   }
 
   int file_type = check_file_type(filename);
-  if (file_type == NOTYPE) {
-    print_error_message(type_error());
-    return 1;
-  }
 
   Steganography* steg = nullptr;
   switch (file_type) {
@@ -42,6 +39,13 @@ int main(int argc, const char* argv[]) {
     case BMP:
       steg = new BmpSteganography(filename);
       break;
+    case PNG:
+      steg = new PNG_Steganography(filename);
+      break;
+    case NOTYPE:
+    default:
+      print_error_message(type_error());
+      return 1;
   }
 
   switch (argv_token) {
@@ -52,6 +56,7 @@ int main(int argc, const char* argv[]) {
       std::cout << steg->Reveal() << std::endl;
       break;
   }
+
   if (steg != nullptr) {
     delete steg;
   }
